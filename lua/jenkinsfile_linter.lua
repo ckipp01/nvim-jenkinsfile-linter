@@ -3,7 +3,8 @@ local log = require("plenary.log").new({ plugin = "jenkinsfile-linter", level = 
 
 local user = os.getenv("JENKINS_USERNAME")
 local password = os.getenv("JENKINS_PASSWORD")
-local jenkins_url = os.getenv("JENKINS_HOST")
+local token = os.getenv("JENKINS_TOKEN")
+local jenkins_host = os.getenv("JENKINS_HOST")
 local namespace_id = vim.api.nvim_create_namespace("jenkinsfile-linter")
 local validated_msg = "Jenkinsfile successfully validated."
 local unauthorized_msg = "ERROR 401 Unauthorized"
@@ -13,9 +14,9 @@ local function get_crumb_job()
   return Job:new({
     command = "curl",
     args = {
-      "--user", -- TODO: can we also use a token?
-      user .. ":" .. password,
-      jenkins_url .. "/crumbIssuer/api/json",
+      "--user",
+      user .. ":" .. (token or password),
+      jenkins_host .. "/crumbIssuer/api/json",
     },
   })
 end
@@ -34,15 +35,15 @@ local validate_job = vim.schedule_wrap(function(crumb_job)
       :new({
         command = "curl",
         args = {
-          "--user", -- TODO: can we also use a token?
-          user .. ":" .. password,
+          "--user",
+          user .. ":" .. (token or password),
           "-X",
           "POST",
           "-H",
           "Jenkins-Crumb:" .. args.crumb,
           "-d",
           "jenkinsfile=" .. table.concat(buf_contents, "\n"),
-          jenkins_url .. "/pipeline-model-converter/validate",
+          jenkins_host .. "/pipeline-model-converter/validate",
         },
 
         on_stderr = function(err, _)
@@ -93,9 +94,9 @@ end)
 local function check_creds()
   if user == nil then
     return false, "JENKINS_USERNAME is not set, please set it"
-  elseif password == nil then
-    return false, "JENKINS_PASSWORD is not set, please set it"
-  elseif jenkins_url == nil then
+  elseif password == nil and token == nil then
+    return false, "JENKINS_PASSWORD or JENKINS_TOKEN needs to be set, please set one"
+  elseif jenkins_host == nil then
     return false, "JENKINS_HOST is not set, please set it"
   else
     return true
