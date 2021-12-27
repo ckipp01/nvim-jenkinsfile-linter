@@ -4,7 +4,7 @@ A small plugin for Neovim that utilizes the [Jenkins pipeline
 linter](https://www.jenkins.io/doc/book/pipeline/development/) to ensure your
 Jenkinsfiles are valid before using them.
 
-https://user-images.githubusercontent.com/13974112/147473843-17a9ce27-7b48-47cc-ab36-1a7ab47b8441.mov
+https://user-images.githubusercontent.com/13974112/147474213-b4a0cfdb-e7c5-420d-89b2-293deb312a27.mov
 
 ## Prerequisites
 
