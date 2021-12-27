@@ -1,0 +1,56 @@
+*nvim-jenkinsfile-linter.txt*
+
+A small plugin for Neovim that utilizes the Jenkins pipeline
+linter to ensure your Jenkinsfiles are valid before using them.
+
+You can learn more about the pipeline linter here:
+https://www.jenkins.io/doc/book/pipeline/development/
+
+                     NVIM-JENKINSFILE-LINTER REFERENCE MANUAL
+
+CONTENTS                                               *nvim-jenkinsfile-linter*
+
+    1. Intro........................ |nvim-jenkinsfile-linter-intro|
+    1. PREREQUISITES.................|nvim-jenkinsfile-linter-prerequisites|
+    2. API.......................... |nvim-jenkinsfile-linter-api|
+
+================================================================================
+INTRO                                            *nvim-jenkinsfile-linter-intro*
+
+No one likes having to edit your Jenkinsfile in Jenkins or sending up changes
+to Jenkins only to realize you missed some silly syntax. This plugin aims to
+ease the pain by allowsing you to quickly check if your file is valid using
+the Jenkins pipeline linter.
+================================================================================
+PREREQUISITES                            *nvim-jenkinsfile-linter-prerequisites*
+
+- Neovim >= 0.6 - This plugins uses some Neovim APIs that are first available
+  in 0.6.
+- curl - Under the hood this plugin just uses Plenary to call curl to get your
+  breadcrumb and then hit the validate API.
+- Plenary.nvim - Used for various things such as Jobs and logging.
+- Ensure you have the following env variables set which are used to both
+  retrieve your breadcrumb and also hit the validate API.
+  - `JENKINS_USERNAME`
+  - `JENKINS_PASSWORD`
+  - `JENKINS_HOST`
+
+================================================================================
+
+API                                                *nvim-jenkinsfile-linter-api*
+
+The only thing you really need after setting your env varialbes is this
+mapping: >
+
+  require("jenkinsfile_linter").validate()
+<
+
+                                                                    *validate()*
+validate()                 Used to validate the current Jenkinsfile that
+                           you're in.
+
+                            Return:
+                              Either a message that your file is valid or
+                              you'll see diagnostics appear.
+
+vim:tw=80:ts=2:ft=help:
