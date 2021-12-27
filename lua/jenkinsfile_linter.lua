@@ -28,10 +28,7 @@ local validate_job = vim.schedule_wrap(function(crumb_job)
     log.error("Unable to hit your crumb provider. Please check your host")
   else
     local args = vim.fn.json_decode(concatenated_crumbs)
-
-    -- TODO super sketchy, but file:// won't work with Jenkins, so we strip it
-    -- to just get the abs path. We'll need to find a better way to do this
-    local uri = vim.uri_from_bufnr(0):sub(8)
+    local buf_contents = vim.api.nvim_buf_get_lines(0, 0, -1, false)
 
     return Job
       :new({
@@ -43,8 +40,8 @@ local validate_job = vim.schedule_wrap(function(crumb_job)
           "POST",
           "-H",
           "Jenkins-Crumb:" .. args.crumb,
-          "-F",
-          "jenkinsfile=<" .. uri,
+          "-d",
+          "jenkinsfile=" .. table.concat(buf_contents, "\n"),
           jenkins_url .. "/pipeline-model-converter/validate",
         },
 
