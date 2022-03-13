@@ -1,22 +1,14 @@
 local Job = require("plenary.job")
 local log = require("plenary.log").new({ plugin = "jenkinsfile-linter", level = "info" })
 
-local user = os.getenv("JENKINS_USER_ID")
+local user = os.getenv("JENKINS_USER_ID") or os.getenv("JENKINS_USERNAME")
 local password = os.getenv("JENKINS_PASSWORD")
-local token = os.getenv("JENKINS_API_TOKEN")
-local jenkins_url = os.getenv("JENKINS_URL")
+local token = os.getenv("JENKINS_API_TOKEN") or os.getenv("JENKINS_TOKEN")
+local jenkins_url = os.getenv("JENKINS_URL") or os.getenv("JENKINS_HOST")
 local namespace_id = vim.api.nvim_create_namespace("jenkinsfile-linter")
 local validated_msg = "Jenkinsfile successfully validated."
 local unauthorized_msg = "ERROR 401 Unauthorized"
 local not_found_msg = "ERROR 404 Not Found"
-
-if jenkins_url == nil then
-  jenkins_url = os.getenv("JENKINS_HOST")
-elseif user == nil then
-  user = os.getenv("JENKINS_USERNAME")
-elseif token == nil then
-  user = os.getenv("JENKINS_TOKEN")
-end
 
 local function get_crumb_job()
   return Job:new({
