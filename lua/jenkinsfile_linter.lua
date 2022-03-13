@@ -1,7 +1,7 @@
 local Job = require("plenary.job")
 local log = require("plenary.log").new({ plugin = "jenkinsfile-linter", level = "info" })
 
-local user = os.getenv("JENKINS_USERNAME")
+local user = os.getenv("JENKINS_USER_ID")
 local password = os.getenv("JENKINS_PASSWORD")
 local token = os.getenv("JENKINS_TOKEN")
 local jenkins_url = os.getenv("JENKINS_URL")
@@ -12,6 +12,8 @@ local not_found_msg = "ERROR 404 Not Found"
 
 if jenkins_url == nil then
   jenkins_url = os.getenv("JENKINS_HOST")
+elseif user == nil then
+  user = os.getenv("JENKINS_USERNAME")
 end
 
 local function get_crumb_job()
@@ -97,7 +99,7 @@ end)
 
 local function check_creds()
   if user == nil then
-    return false, "JENKINS_USERNAME is not set, please set it"
+    return false, "JENKINS_USER_ID is not set, please set it"
   elseif password == nil and token == nil then
     return false, "JENKINS_PASSWORD or JENKINS_TOKEN needs to be set, please set one"
   elseif jenkins_url == nil then

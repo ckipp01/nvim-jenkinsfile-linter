@@ -11,7 +11,7 @@ https://user-images.githubusercontent.com/13974112/147474213-b4a0cfdb-e7c5-420d-
 - Neovim >= 0.6
 - curl available
 - [Plenary.nvim](https://github.com/nvim-lua/plenary.nvim) installed
-- Ensure you have `JENKINS_USERNAME`, `JENKINS_URL`, and also either `JENKINS_TOKEN`
+- Ensure you have `JENKINS_USER_ID`, `JENKINS_URL`, and also either `JENKINS_TOKEN`
     or `JENKINS_PASSWORD` set.
 
 ## Installation
