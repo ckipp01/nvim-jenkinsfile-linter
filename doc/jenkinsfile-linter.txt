@@ -19,7 +19,7 @@ INTRO                                            *nvim-jenkinsfile-linter-intro*
 
 No one likes having to edit your Jenkinsfile in Jenkins or sending up changes
 to Jenkins only to realize you missed some silly syntax. This plugin aims to
-ease the pain by allowsing you to quickly check if your file is valid using
+ease the pain by allowing you to quickly check if your file is valid using
 the Jenkins pipeline linter.
 ================================================================================
 PREREQUISITES                            *nvim-jenkinsfile-linter-prerequisites*
@@ -39,7 +39,7 @@ PREREQUISITES                            *nvim-jenkinsfile-linter-prerequisites*
 
 API                                                *nvim-jenkinsfile-linter-api*
 
-The only thing you really need after setting your env varialbes is this
+The only thing you really need after setting your env variables is this
 mapping: >
 
   require("jenkinsfile_linter").validate()
