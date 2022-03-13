@@ -32,7 +32,7 @@ PREREQUISITES                            *nvim-jenkinsfile-linter-prerequisites*
 - Ensure you have the following env variables set which are used to both
   retrieve your breadcrumb and also hit the validate API.
   - `JENKINS_USER_ID`
-  - `JENKINS_TOKEN` or `JENKINS_PASSWORD`
+  - `JENKINS_API_TOKEN` or `JENKINS_PASSWORD`
   - `JENKINS_URL`
 
 ================================================================================
