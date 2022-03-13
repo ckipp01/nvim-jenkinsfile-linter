@@ -1,10 +1,10 @@
 local Job = require("plenary.job")
 local log = require("plenary.log").new({ plugin = "jenkinsfile-linter", level = "info" })
 
-local user = os.getenv("JENKINS_USERNAME")
+local user = os.getenv("JENKINS_USER_ID") or os.getenv("JENKINS_USERNAME")
 local password = os.getenv("JENKINS_PASSWORD")
-local token = os.getenv("JENKINS_TOKEN")
-local jenkins_host = os.getenv("JENKINS_HOST")
+local token = os.getenv("JENKINS_API_TOKEN") or os.getenv("JENKINS_TOKEN")
+local jenkins_url = os.getenv("JENKINS_URL") or os.getenv("JENKINS_HOST")
 local namespace_id = vim.api.nvim_create_namespace("jenkinsfile-linter")
 local validated_msg = "Jenkinsfile successfully validated."
 local unauthorized_msg = "ERROR 401 Unauthorized"
@@ -16,7 +16,7 @@ local function get_crumb_job()
     args = {
       "--user",
       user .. ":" .. (token or password),
-      jenkins_host .. "/crumbIssuer/api/json",
+      jenkins_url .. "/crumbIssuer/api/json",
     },
   })
 end
@@ -43,7 +43,7 @@ local validate_job = vim.schedule_wrap(function(crumb_job)
           "Jenkins-Crumb:" .. args.crumb,
           "-d",
           "jenkinsfile=" .. table.concat(buf_contents, "\n"),
-          jenkins_host .. "/pipeline-model-converter/validate",
+          jenkins_url .. "/pipeline-model-converter/validate",
         },
 
         on_stderr = function(err, _)
@@ -93,11 +93,11 @@ end)
 
 local function check_creds()
   if user == nil then
-    return false, "JENKINS_USERNAME is not set, please set it"
+    return false, "JENKINS_USER_ID is not set, please set it"
   elseif password == nil and token == nil then
-    return false, "JENKINS_PASSWORD or JENKINS_TOKEN needs to be set, please set one"
-  elseif jenkins_host == nil then
-    return false, "JENKINS_HOST is not set, please set it"
+    return false, "JENKINS_PASSWORD or JENKINS_API_TOKEN need to be set, please set one"
+  elseif jenkins_url == nil then
+    return false, "JENKINS_URL is not set, please set it"
   else
     return true
   end
