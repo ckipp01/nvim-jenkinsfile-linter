@@ -6,6 +6,7 @@ local password = os.getenv("JENKINS_PASSWORD")
 local token = os.getenv("JENKINS_API_TOKEN") or os.getenv("JENKINS_TOKEN")
 local jenkins_url = os.getenv("JENKINS_URL") or os.getenv("JENKINS_HOST")
 local namespace_id = vim.api.nvim_create_namespace("jenkinsfile-linter")
+local insecure = os.getenv("JENKINS_INSECURE") and "--insecure" or ""
 local validated_msg = "Jenkinsfile successfully validated."
 local unauthorized_msg = "ERROR 401 Unauthorized"
 local not_found_msg = "ERROR 404 Not Found"
@@ -14,6 +15,7 @@ local function get_crumb_job()
   return Job:new({
     command = "curl",
     args = {
+      insecure,
       "--user",
       user .. ":" .. (token or password),
       jenkins_url .. "/crumbIssuer/api/json",
@@ -35,6 +37,7 @@ local validate_job = vim.schedule_wrap(function(crumb_job)
       :new({
         command = "curl",
         args = {
+          insecure,
           "--user",
           user .. ":" .. (token or password),
           "-X",

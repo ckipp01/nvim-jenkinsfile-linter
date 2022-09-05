@@ -34,6 +34,8 @@ PREREQUISITES                            *nvim-jenkinsfile-linter-prerequisites*
   - `JENKINS_USER_ID`
   - `JENKINS_API_TOKEN` or `JENKINS_PASSWORD`
   - `JENKINS_URL`
+- Optionally set JENKINS_INSECURE to any value if your server does not have a
+  proper SSL certificate.
 
 ================================================================================
 
