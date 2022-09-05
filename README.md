@@ -13,6 +13,7 @@ https://user-images.githubusercontent.com/13974112/147474213-b4a0cfdb-e7c5-420d-
 - [Plenary.nvim](https://github.com/nvim-lua/plenary.nvim) installed
 - Ensure you have `JENKINS_USER_ID`, `JENKINS_URL`, and also either `JENKINS_API_TOKEN`
     or `JENKINS_PASSWORD` set.
+- Optinally set `JENKINS_INSECURE` to any value to skip the SSL certificate validation (useful for testing)
 
 ## Installation
 
