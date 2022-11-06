@@ -117,4 +117,5 @@ end
 
 return {
   validate = validate,
+  check_creds = check_creds,
 }
