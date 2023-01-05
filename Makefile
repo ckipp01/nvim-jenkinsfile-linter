@@ -5,4 +5,4 @@ format-check:
 	stylua --check lua/
 
 lint:
-	luacheck lua/
+	selene lua/
