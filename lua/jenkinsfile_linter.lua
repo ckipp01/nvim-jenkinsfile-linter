@@ -24,7 +24,7 @@ local function get_crumb_job()
 end
 
 local function urlencode(text)
-  text = text:gsub("([^A-Za-z0-9%-_.!~*'()])", function (c)
+  text = text:gsub("([^A-Za-z0-9%-_.!~*'()])", function(c)
     return string.format("%%%02X", string.byte(c))
   end)
   return text
