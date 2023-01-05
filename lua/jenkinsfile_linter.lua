@@ -23,6 +23,13 @@ local function get_crumb_job()
   })
 end
 
+local function urlencode(text)
+  text = text:gsub("([^A-Za-z0-9%-_.!~*'()])", function (c)
+    return string.format("%%%02X", string.byte(c))
+  end)
+  return text
+end
+
 local validate_job = vim.schedule_wrap(function(crumb_job)
   local concatenated_crumbs = table.concat(crumb_job._stdout_results, " ")
   if string.find(concatenated_crumbs, unauthorized_msg) then
@@ -45,7 +52,7 @@ local validate_job = vim.schedule_wrap(function(crumb_job)
           "-H",
           "Jenkins-Crumb:" .. args.crumb,
           "-d",
-          "jenkinsfile=" .. table.concat(buf_contents, "\n"),
+          "jenkinsfile=" .. urlencode(table.concat(buf_contents, "\n")),
           jenkins_url .. "/pipeline-model-converter/validate",
         },
 
