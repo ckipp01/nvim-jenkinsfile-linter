@@ -16,15 +16,22 @@ jobs:
     - name: Checkout sources
       uses: actions/checkout@v3
 
-    - name: Setup luacheck
+    - name: Setup selene
       run: |
-        sudo apt update &&
-        sudo apt install -y lua5.1 luarocks &&
-        sudo luarocks install luacheck
+        wget "https://github.com/Kampfkarren/selene/releases/download/$VERSION/selene-$VERSION-linux.zip"
+        echo "$SHA256_CHECKSUM  selene-$VERSION-linux.zip" > "selene-$VERSION-linux.zip.checksum"
+        sha256sum --check "selene-$VERSION-linux.zip.checksum"
+        unzip "selene-$VERSION-linux.zip"
+        install -Dp selene "$HOME/.local/bin/selene"
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-    - name: Run luacheck
-      run: |
-        make lint
+      env:
+        VERSION: "0.23.1"
+        # shashum -a 256 selene-<version>-linux.zip
+        SHA256_CHECKSUM: "87fbdb22e1adf7342ef74f73236b3ba5eb455b0f15c6effc49cb449b56843c31"
+
+    - name: Run selene
+      run: make lint
 
   format-check:
     runs-on: ubuntu-latest
@@ -36,5 +43,5 @@ jobs:
       uses: JohnnyMorganz/stylua-action@v2.0.0
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        version: 0.11.2
+        version: 0.15.3
         args: --check lua/
