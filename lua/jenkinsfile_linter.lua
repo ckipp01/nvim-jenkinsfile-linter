@@ -50,8 +50,8 @@ local validate_job = vim.schedule_wrap(function(crumb_job)
         "POST",
         "-H",
         "Jenkins-Crumb:" .. args.crumb,
-        "-d",
-        "jenkinsfile=" .. urlencode(table.concat(buf_contents, "\n")),
+        "-F",
+        "jenkinsfile=<" .. vim.fn.expand("%:p"),
         jenkins_url .. "/pipeline-model-converter/validate",
       },
 
