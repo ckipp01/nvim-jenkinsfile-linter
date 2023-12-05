@@ -23,13 +23,6 @@ local function get_crumb_job()
   })
 end
 
-local function urlencode(text)
-  text = text:gsub("([^A-Za-z0-9%-_.!~*'()])", function(c)
-    return string.format("%%%02X", string.byte(c))
-  end)
-  return text
-end
-
 local validate_job = vim.schedule_wrap(function(crumb_job)
   local concatenated_crumbs = table.concat(crumb_job._stdout_results, " ")
   if string.find(concatenated_crumbs, unauthorized_msg) then
@@ -38,7 +31,6 @@ local validate_job = vim.schedule_wrap(function(crumb_job)
     log.error("Unable to hit your crumb provider. Please check your host")
   else
     local args = vim.fn.json_decode(concatenated_crumbs)
-    local buf_contents = vim.api.nvim_buf_get_lines(0, 0, -1, false)
 
     return Job:new({
       command = "curl",
@@ -50,8 +42,8 @@ local validate_job = vim.schedule_wrap(function(crumb_job)
         "POST",
         "-H",
         "Jenkins-Crumb:" .. args.crumb,
-        "-d",
-        "jenkinsfile=" .. urlencode(table.concat(buf_contents, "\n")),
+        "-F",
+        "jenkinsfile=<" .. vim.fn.expand("%:p"),
         jenkins_url .. "/pipeline-model-converter/validate",
       },
 
