@@ -78,7 +78,10 @@ local validate_job = vim.schedule_wrap(function(crumb_job)
         if data == validated_msg then
           vim.diagnostic.reset(namespace_id, 0)
           vim.notify(validated_msg, vim.log.levels.INFO)
-        else
+        elseif data ~= nil then
+          -- better filter out if the line of response is empty,
+          -- otherwise throw out unexpected error
+          --
           -- We only want to grab the msg, line, and col. We just throw
           -- everything else away. NOTE: That only one seems to ever be
           -- returned so this in theory will only ever match at most once per
